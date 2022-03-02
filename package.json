@@ -1,0 +1,33 @@
+{
+  "name": "@gear-js/gear-wrapper",
+  "version": "0.0.1",
+  "main": "./bin/app.js",
+  "license": "MIT",
+  "bin": {
+    "gear-wrapper": "bin/app.js"
+  },
+  "preferGlobal": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf bin",
+    "start": "ts-node ./src/app.ts"
+  },
+  "dependencies": {
+    "@gear-js/gear-wrapper": "./",
+    "chalk": "^5.0.0",
+    "commander": "^9.0.0",
+    "ejs": "^3.1.6",
+    "esformatter": "^0.11.3",
+    "global": "^4.4.0",
+    "inquirer": "^8.2.0",
+    "js-beautify": "^1.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "ts-node": "^10.6.0",
+    "typescript": "^4.6.2"
+  }
+}
