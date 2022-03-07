@@ -44,3 +44,7 @@ export function getArgsNamesWithType(args: IArg[]) {
   }
   return args.map((arg) => `${Object.keys(arg)[0]}: ${Object.values(arg)[0]}`).join(', ');
 }
+
+export function getType(value: string, ts: boolean) {
+  return ts ? value : '';
+}

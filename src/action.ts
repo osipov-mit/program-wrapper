@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 import * as fs from 'fs';
 import { getFuncSignature, getFunctionsNames } from './generate/utils';
-import { generateJs, generateTs } from './generate';
+import { generate } from './generate';
 import { join, resolve } from 'path';
 
 export async function checkPath(path: string): Promise<string> {
@@ -14,19 +14,20 @@ export async function checkPath(path: string): Promise<string> {
   return path;
 }
 
-export async function processGenerate(path: string, typescript = true) {
+export async function processGenerate(path: string, ts: boolean) {
   const mod = await import(resolve(path));
   const declarationFile = fs.readFileSync(resolve(`${path}.d.ts`));
   const functions = getFunctionsNames(mod);
-  const result = typescript
-    ? generateTs(
-        functions.map((name) => {
-          return {
-            name,
-            ...getFuncSignature(name, declarationFile.toString()),
-          };
-        }),
-      )
-    : generateJs();
-  fs.writeFileSync(join(path.split('/').slice(0, -1).join('/'), 'index.ts'), result);
+  const result = generate(
+    functions.map((name) => {
+      return {
+        name,
+        ...getFuncSignature(name, declarationFile.toString()),
+      };
+    }),
+    ts,
+  );
+  const resultFilePath = join(path.split('/').slice(0, -1).join('/'), `index.${ts ? 'ts' : 'js'}`);
+  console.log(resultFilePath);
+  fs.writeFileSync(resultFilePath, result);
 }

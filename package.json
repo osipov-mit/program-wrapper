@@ -4,7 +4,7 @@
   "main": "./bin/app.js",
   "license": "MIT",
   "bin": {
-    "gear-wrapper": "bin/app.js"
+    "gear-wrapper": "./bin/app.js"
   },
   "preferGlobal": true,
   "publishConfig": {

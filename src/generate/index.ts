@@ -1,2 +1,1 @@
-export { generateJs } from './javascript';
-export { generateTs } from './typescript';
+export { generate } from './generate';

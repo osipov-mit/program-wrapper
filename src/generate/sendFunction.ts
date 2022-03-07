@@ -1,14 +1,14 @@
 import { IArg } from '../interfaces';
-import { getArgsNames, getArgsNamesWithType } from './utils';
+import { getArgsNames, getArgsNamesWithType, getType } from './utils';
 
-export function generateSendFunc(name: string, withTypes: boolean, args: IArg[], resultType: string) {
-  `\n  async ${name.slice(2)}(${[
-    withTypes ? getArgsNamesWithType(args) : getArgsNames(args),
-    `gasLimit${withTypes ? ': number | string' : ''}`,
-    `value${withTypes ? ': number | string' : ''}`,
-  ].join(', ')})${withTypes ? `: Promise<${resultType}>` : ''} {
-await this.isReady;
-const payload = this.mod.${name}(${getArgsNames(args)});
-return this.api.message.submit({ destination: this.programId, payload, gasLimit, value });
-}`;
+export function generateSendFunc(name: string, ts: boolean, args: IArg[]) {
+  return `\n  async ${name.slice(2)}(${[
+    ts ? getArgsNamesWithType(args) : getArgsNames(args),
+    `gasLimit${getType(': number | string', ts)}`,
+    `value${getType(': number | string', ts)}`,
+  ].join(', ')})${getType(`: Promise<SubmittableExtrinsic<'promise', ISubmittableResult>>`, ts)} {
+    await this.isReady;
+    const payload = this.mod.${name}(${getArgsNames(args)});
+    return this.api.message.submit({ destination: this.programId, payload, gasLimit, value });
+  }`;
 }
