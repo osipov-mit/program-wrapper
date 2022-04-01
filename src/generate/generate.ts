@@ -1,21 +1,12 @@
-import { IFunction } from '../interfaces';
-import { generateClass } from './class';
-import { generateConstructor } from './constructor';
-import { generateDecodeFunc } from './decodeFunction';
-// import { generateImports } from './imports';
-import { generateSendFunc } from './sendFunction';
-import { generateStateFunc } from './stateFunction';
+import { IFunction } from '../interfaces.js';
+import { generateClass } from './class.js';
+import { generateConstructor } from './constructor.js';
+import { generateDecodeFunc } from './decodeFunction.js';
+import { generateSendFunc } from './sendFunction.js';
+import { generateStateFunc } from './stateFunction.js';
 
 export function generate(functions: IFunction[], ts: boolean): string {
   const generatedFunctions = [];
-  // result.push(generateImports());
-  // result.push(`export class Wrapper {`);
-  // result.push(
-  //   `  api: GearApi;
-  // programId: string;
-  // isReady: Promise<string>;
-  // mod: any;\n`,
-  // );
   generatedFunctions.push(generateConstructor(ts));
   functions.forEach(({ name, args, resultType }) => {
     if (name.startsWith('__decode')) {
@@ -26,6 +17,5 @@ export function generate(functions: IFunction[], ts: boolean): string {
       generatedFunctions.push(generateStateFunc(name, ts, args, resultType));
     }
   });
-  // generatedFunctions.push(`}`);
   return generateClass(ts, generatedFunctions);
 }

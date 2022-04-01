@@ -1,4 +1,4 @@
-import { IArg, IFunction } from 'interfaces';
+import { IArg } from '../interfaces.js';
 
 /**
  *

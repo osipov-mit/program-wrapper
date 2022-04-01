@@ -1,11 +1,13 @@
 import { Command } from 'commander';
-import { checkPath, processGenerate } from './action';
+import { processGenerate } from './action.js';
+import { checkPath, checkTarget } from './check.js';
 
 export function setupCommands(program: Command) {
   program
     .argument(`[path]`, 'Path to pkg with files generated using wasm-bindgen')
     .option('-j, --ts [ts]', `Generate typescript wrapper`)
+    .option('-t --target [target]', `What type of output to generate, valid values are [web, nodejs]`, 'web')
     .action(async (path, options) => {
-      processGenerate(await checkPath(path), options.ts);
+      processGenerate(await checkPath(path), options.ts, await checkTarget(options.target));
     });
 }

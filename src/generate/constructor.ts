@@ -1,4 +1,4 @@
-import { getType } from './utils';
+import { getType } from './utils.js';
 
 export function generateConstructor(ts: boolean) {
   return `constructor(providerAddress${getType(': string', ts)}, programId${getType(': string', ts)}) {

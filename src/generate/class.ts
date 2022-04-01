@@ -1,4 +1,4 @@
-import { generateImports } from './imports';
+import { generateImports } from './imports.js';
 
 export function generateClass(ts: boolean, functions: string[]): string {
   const result = [];

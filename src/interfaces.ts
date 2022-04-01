@@ -7,3 +7,5 @@ export interface IFunction {
   args: IArg[];
   resultType: string;
 }
+
+export type Target = 'web' | 'nodejs';

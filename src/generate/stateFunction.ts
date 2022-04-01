@@ -1,5 +1,5 @@
-import { IArg } from '../interfaces';
-import { getArgsNames, getArgsNamesWithType, getType } from './utils';
+import { IArg } from '../interfaces.js';
+import { getArgsNames, getArgsNamesWithType, getType } from './utils.js';
 
 export function generateStateFunc(name: string, ts: boolean, args: IArg[], resultType: string) {
   return `\n  async ${name.slice(2)}(${getArgsNamesWithType(args)})${getType(`: Promise<${resultType}>`, ts)} {

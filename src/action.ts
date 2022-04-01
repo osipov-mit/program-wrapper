@@ -1,22 +1,19 @@
-import inquirer from 'inquirer';
 import * as fs from 'fs';
-import { getFuncSignature, getFunctionsNames } from './generate/utils';
-import { generate } from './generate';
+import { generate, getFuncSignature, getFunctionsNames } from './generate/index.js';
 import { join, resolve } from 'path';
+import logger from './logger.js';
+import { getPkgPath, rmPackageJson, writePackageJson } from './utils.js';
+import { replaceEnvImport, writeEnvFile } from './replaceEnv.js';
+import { Target } from 'interfaces';
 
-export async function checkPath(path: string): Promise<string> {
-  if (path === undefined) {
-    const { path } = await inquirer.prompt([
-      { type: 'input', name: 'path', message: 'Enter path to pkg with files generated using wasm-bindgen' },
-    ]);
-    return path;
-  }
-  return path;
-}
+export async function processGenerate(path: string, ts: boolean, target: Target) {
+  const { modPath, declarationPath, pkgPath } = getPkgPath(resolve(path));
+  replaceEnvImport(modPath, target);
+  writeEnvFile(pkgPath, ts, target);
+  writePackageJson(pkgPath, target);
 
-export async function processGenerate(path: string, ts: boolean) {
-  const mod = await import(resolve(path));
-  const declarationFile = fs.readFileSync(resolve(`${path}.d.ts`));
+  const mod = await import(modPath);
+  const declarationFile = fs.readFileSync(declarationPath);
   const functions = getFunctionsNames(mod);
   const result = generate(
     functions.map((name) => {
@@ -27,7 +24,7 @@ export async function processGenerate(path: string, ts: boolean) {
     }),
     ts,
   );
-  const resultFilePath = join(path.split('/').slice(0, -1).join('/'), `index.${ts ? 'ts' : 'js'}`);
-  console.log(resultFilePath);
+  const resultFilePath = join(pkgPath, `index.${ts ? 'ts' : 'js'}`);
   fs.writeFileSync(resultFilePath, result);
+  rmPackageJson(pkgPath, target);
 }
