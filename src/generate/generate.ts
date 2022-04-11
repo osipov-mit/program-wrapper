@@ -1,13 +1,15 @@
-import { IFunction } from '../interfaces.js';
+import { IFunction, Target } from '../interfaces.js';
 import { generateClass } from './class.js';
 import { generateConstructor } from './constructor.js';
 import { generateDecodeFunc } from './decodeFunction.js';
+import { generateInitMethod } from './initMethod.js';
 import { generateSendFunc } from './sendFunction.js';
 import { generateStateFunc } from './stateFunction.js';
 
-export function generate(functions: IFunction[], ts: boolean): string {
+export function generate(className: string, functions: IFunction[], ts: boolean, target: Target): string {
   const generatedFunctions = [];
   generatedFunctions.push(generateConstructor(ts));
+  generatedFunctions.push(generateInitMethod(target));
   functions.forEach(({ name, args, resultType }) => {
     if (name.startsWith('__decode')) {
       generatedFunctions.push(generateDecodeFunc(name, ts, args, resultType));
@@ -17,5 +19,5 @@ export function generate(functions: IFunction[], ts: boolean): string {
       generatedFunctions.push(generateStateFunc(name, ts, args, resultType));
     }
   });
-  return generateClass(ts, generatedFunctions);
+  return generateClass(className, ts, generatedFunctions);
 }

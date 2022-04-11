@@ -1,22 +1,24 @@
 import { generateImports } from './imports.js';
 
-export function generateClass(ts: boolean, functions: string[]): string {
+export function generateClass(className: string, ts: boolean, functions: string[]): string {
   const result = [];
   result.push(generateImports(ts));
   result.push(
     ts
-      ? `export class Wrapper {
+      ? `export class ${className} {
   api: GearApi;
   programId: string;
   isReady: Promise<string>;
-  mod: any;\n
+  mod: any;
+  providerAddress: string | undefined;\n
   ${functions.join('\n')}
 }`
-      : `export class Wrapper {
+      : `export class ${className} {
   api;
   programId;
   isReady;
-  mod;\n
+  mod;
+  providerAddress;\n
   ${functions.join('\n')}
 }`,
   );

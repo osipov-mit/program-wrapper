@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --experimental-wasm-modules --experimental-modules
 
 import { Command } from 'commander';
 import { setupCommands } from './commands.js';

@@ -13,13 +13,17 @@ export async function checkPath(path: string): Promise<string> {
 }
 
 export async function checkTarget(target: Target): Promise<Target> {
-  if (!['web', 'nodejs'].includes(target)) {
+  if (!['web', 'nodejs', 'bundler'].includes(target)) {
     let { target } = await inquirer.prompt([
-      { type: 'input', name: 'target', message: 'Enter type of output to generate, valid values are [web, nodejs]' },
+      {
+        type: 'input',
+        name: 'target',
+        message: 'Enter type of output to generate, valid values are [web, nodejs, bundler]',
+      },
     ]);
-    if (!['web', 'nodejs'].includes(target)) {
-      target = 'web';
-      logger.info('Target set to web');
+    if (!['web', 'nodejs', 'bundler'].includes(target)) {
+      target = 'bundler';
+      logger.info('Target set to bundler');
     }
     return target;
   }

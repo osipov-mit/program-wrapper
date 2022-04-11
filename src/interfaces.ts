@@ -8,4 +8,6 @@ export interface IFunction {
   resultType: string;
 }
 
-export type Target = 'web' | 'nodejs';
+export type Target = 'web' | 'nodejs' | 'bundler';
+
+export type Paths = { pkgPath: string; declarationPath?: string; modPath: string; name: string };

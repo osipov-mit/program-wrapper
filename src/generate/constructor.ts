@@ -1,17 +1,20 @@
 import { getType } from './utils.js';
 
 export function generateConstructor(ts: boolean) {
-  return `constructor(providerAddress${getType(': string', ts)}, programId${getType(': string', ts)}) {
+  const constructs = [
+    `constructor(api${getType(': GearApi', ts)}, programId${getType(': string', ts)})\n`,
+    `  constructor(providerAddress${getType(': string', ts)}, programId${getType(': string', ts)})\n`,
+    `  constructor(providerAddressOrApi${getType(': string | GearApi', ts)}, programId${getType(': string', ts)}) {
     this.programId = programId;
-    this.isReady = new Promise((resolve) => {
-      Promise.all([
-        GearApi.create({ providerAddress }).then((api) => {
-          this.api = api
-        }),
-        rust.then((mod) => {
-          this.mod = mod;
-        })
-      ]).then(() => resolve('ready'));
+    if (typeof providerAddressOrApi === 'string') {
+      this.providerAddress = providerAddressOrApi;
+    } else {
+      this.api = providerAddressOrApi;
+    }
+    this.isReady = new Promise((resolve, reject) => {
+      this.init().then(() => resolve('ready')).catch((error) => reject(error))
     });
-  }`;
+  }\n`,
+  ];
+  return constructs.join('\n');
 }
